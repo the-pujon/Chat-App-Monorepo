@@ -6,7 +6,12 @@ class SocketService {
         console.log("SocketService initialized");
         // Initialize the Socket.IO server
         // Note: The server instance should be passed from the HTTP server in a real application
-        this._io = new Server();
+        this._io = new Server({
+            cors: {
+                allowedHeaders: ["*"],
+                origin: "*",
+            }
+        });
     }
 
     public initListeners(){
