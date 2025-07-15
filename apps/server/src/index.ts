@@ -1,15 +1,24 @@
-import http from 'http';
+import http from "http";
+import SocketService from "./services/socket";
 
-const init = async () =>{
-const httpServer = await http.createServer()
-const port = process.env.PORT || 6000;
-    httpServer.listen(port, () => {
-        console.log(`Server is running on port ${port}::: ${new Date().toLocaleString()} \n :::: http://localhost:${port}`);
-    });
-}
+const init = async () => {
+  const socketService = new SocketService()
+  const httpServer = await http.createServer();
+  const port = process.env.PORT || 6000;
+
+  socketService.io.attach(httpServer)
+
+  httpServer.listen(port, () => {
+    console.log(
+      `Server is running on port ${port}::: ${new Date().toLocaleString()} \n :::: http://localhost:${port}`
+    );
+  });
+
+  socketService.initListeners();
+};
 
 init().catch((error) => {
-    console.error('Error starting the server:', error);
-    process.exit(1);
+  console.error("Error starting the server:", error);
+  process.exit(1);
 });
 export default init;
